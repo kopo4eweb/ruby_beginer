@@ -6,18 +6,18 @@
 то выводится строка "Ваш вес уже оптимальный"
 =end
 
-puts "--=== Идеальный вес ===--"
+puts '--=== Идеальный вес ===--'
 
-puts "Как вас зовут?"
+puts 'Как вас зовут?'
 name = gets.chomp.capitalize!
 
 puts "Какой у вас рост в сантиметрах?\nВведите число:"
 heigth = gets.chomp.to_i
 
-calc = (heigth - 110) * 1.15
+weight = (heigth - 110) * 1.15
 
-if calc <= 0
-    puts "#{name}, Ваш вес уже оптимальный"
+if weight <= 0
+  puts "#{name}, Ваш вес уже оптимальный"
 else 
-    puts "#{name}, Ваш идеальный вес #{calc} кг."
+  puts "#{name}, Ваш идеальный вес #{weight} кг."
 end
