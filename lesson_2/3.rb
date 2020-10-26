@@ -2,18 +2,16 @@
 Заполнить массив числами фибоначчи до 100
 =end
 
-array = []
+array = [1, 1]
+i = 1
 
-(0..100).each do |i|
-  if i == 0
-    array << 0
-  elsif i == 1
-    array << 1
-  elsif i == 2
-    array << 2
-  else
-    array << array[i - 2].to_i + array[i - 1].to_i
-  end
+loop do
+  fibonachi_num =  array[i - 1] + array[i]
+
+  break if fibonachi_num > 100
+
+  array << fibonachi_num
+  i += 1
 end
 
 puts array.inspect

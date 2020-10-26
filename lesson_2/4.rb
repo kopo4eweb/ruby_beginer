@@ -4,11 +4,9 @@
 
 array_vowels = ['а', 'и', 'о', 'у', 'ы', 'е', 'э', 'ю', 'я']
 hash_vowels = {}
-i = 1
 
-('а'..'я').each do |char| 
-  array_vowels.each { |vowel| hash_vowels[char] = i if char == vowel }
-  i += 1
+('а'..'я').each_with_index do |char, index| 
+  array_vowels.each { |vowel| hash_vowels[char] = index + 1 if char == vowel }
 end
 
 puts hash_vowels.inspect

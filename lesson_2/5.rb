@@ -11,37 +11,31 @@
 puts 'Введите день (число от 1 до 31):'
 num_day = gets.chomp.to_i
 
-if num_day <= 0 || num_day >= 32
-  puts 'Ошибка - дня с таким номером не сужествует.'
-else
-  puts 'Введите месяц (число от 1 до 12):'
-  num_mounth = gets.chomp.to_i
+return puts 'Ошибка - дня с таким номером не сужествует.' if num_day < 1 || num_day > 31
 
-  if num_mounth <= 0 || num_mounth >= 13
-    puts 'Ошибка - месяца с таким номером не существует.'
-  else
-    array_mounths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+puts 'Введите месяц (число от 1 до 12):'
+num_mounth = gets.chomp.to_i
 
-    puts 'Введите год (число, например 2020):'
-    num_year = gets.chomp.to_i
+return puts 'Ошибка - месяца с таким номером не существует.' if num_mounth < 1 || num_mounth > 12
 
-    if (num_year % 4 == 0 && num_year % 100 != 0) || num_year % 400 == 0
-      array_mounths[1] = 29
-    end
+array_mounths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-    if num_day > array_mounths[num_mounth - 1] 
-      puts 'Ошибка - в этом месяце меньшее кол-во дней'
-    else
-      mounths_day = 0
-      index = num_mounth - 1
+puts 'Введите год (число, например 2020):'
+num_year = gets.chomp.to_i
 
-      while index > 0 do
-        index -= 1
-        mounths_day += array_mounths[index]        
-      end
-
-      count_days = num_day + mounths_day
-      puts "Порядковый номер даты: #{count_days}"
-    end    
-  end
+if (num_year % 4 == 0 && num_year % 100 != 0) || num_year % 400 == 0
+  array_mounths[1] = 29
 end
+
+return puts 'Ошибка - в этом месяце меньшее кол-во дней' if num_day > array_mounths[num_mounth - 1] 
+
+mounths_day = 0
+index = num_mounth - 1
+
+while index > 0 do
+  index -= 1
+  mounths_day += array_mounths[index]        
+end
+
+count_days = num_day + mounths_day
+puts "Порядковый номер даты: #{count_days}"
