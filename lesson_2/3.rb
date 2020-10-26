@@ -6,7 +6,7 @@ array = [1, 1]
 i = 1
 
 loop do
-  fibonachi_num =  array[i - 1] + array[i]
+  fibonachi_num = array[-1] + array[-2]
 
   break if fibonachi_num > 100
 
