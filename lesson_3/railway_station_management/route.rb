@@ -15,9 +15,7 @@ class Route
     @station_start = station_start
     @station_end = station_end
 
-    @stations = []
-    @stations << station_start
-    @stations << station_end
+    @stations = [station_start, station_end]
   end
 
   # добавление промежуточных станций
