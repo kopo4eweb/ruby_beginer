@@ -20,7 +20,7 @@ class Station
 
   # принятие поезда, добавляем поезд в список поездовб,
   # метод вызывается поездом
-  def to_accept_train(train)
+  def accept_train(train)
     @trains << train
 
     # передаем текущую станцию в поезд для запоминания

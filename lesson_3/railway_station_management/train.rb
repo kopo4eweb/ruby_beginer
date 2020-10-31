@@ -96,7 +96,7 @@ class Train
   private
     # занесение поезда в список поездов станции
     def add_train_to_station_list
-      @route.stations[@current_station_position].to_accept_train(self)
+      @route.stations[@current_station_position].accept_train(self)
     end
 
     # удаление поезда из списка поездов станции
