@@ -63,7 +63,7 @@ class Train
   # этот метод вызывает странция из которой отправляется поезд
   # поезд движется вперед
   def go_ahead
-    return puts 'Вы на конечной станции' if next_station.nil?
+    return puts "Поезд '#{@number}' на конечной станции" if next_station.nil?
 
     # увеличиваем позицию для перемещения по маршруту
     @current_station_position += 1
@@ -74,7 +74,7 @@ class Train
 
   # поезд движется назад
   def go_back
-    return puts 'Вы на начальной станции' if prev_station.nil?
+    return puts "Поезд '#{@number}' на начальной станции" if prev_station.nil?
 
     # уменьшаем позицию для перемещения по маршруту
     @current_station_position -= 1
@@ -101,6 +101,6 @@ class Train
 
     # удаление поезда из списка поездов станции
     def remove_train_from_station_list
-      @current_station.remove_train(self)
+      @current_station.send_train(self)
     end
 end

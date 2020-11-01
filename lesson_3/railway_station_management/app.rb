@@ -17,7 +17,7 @@ def trains_to_station
   @all_stations.each do |station|
     print "  #{station.name}: "
     station.trains.each { |train| print "#{train.number}, " }
-    print "\n    Сколько и какких типов поезда стоят на станции: #{station.trains_list_type}" if !station.trains_list_type.empty?
+    print "\n    Сколько и каких типов поезда стоят на станции: #{station.trains_list_type}" if !station.trains_list_type.empty?
     print "\n"
   end
   puts '---------------------------'
@@ -81,59 +81,60 @@ trains_to_station
 
 =begin 
 Станции могут отправлять только те поезда которые на них находяться.
-Ниже код в котором проверяются отправление стнациями поездов и попытка отправить позд которого на станции нет, так же провереряем, что поезд не может быть отправлен дальше конечной станции в маршруте. 
+Ниже код в котором проверяются отправление стнациями поездов, попытка отправить поезд которого на станции нет, так же провереряем, что поезд не может быть отправлен дальше конечной станции в маршруте. 
 =end
-puts "Станция #{s_s.name} отправляет поезда"
+puts "Станция '#{s_s.name}' отправляет поезда"
 s_s.send_train(t_1)
 s_s.send_train(t_2)
 s_s.send_train(t_3)
-s_s.send_train(t_4)
+s_s.send_train(t_4) # этот поезд не находится на этой станции, он не должен удалиться из станции на которой он находится
 puts '---------------------------'
+
+t_1.go_ahead
+t_2.go_ahead
+t_3.go_ahead
 
 trains_to_station
 
-puts "Станция #{s_e.name} отправляет поезда"
-s_e.send_train(t_1)
-s_e.send_train(t_2)
-s_e.send_train(t_3)
+puts "Станция '#{s_1.name}' отправляет поезда"
+s_1.send_train(t_2)
+puts '---------------------------'
+
+t_1.go_ahead # уже на конечной
+t_2.go_ahead
+t_3.go_ahead # уже на конечной
+
+trains_to_station
+
+puts "Станция '#{s_2.name}' отправляет поезда"
+s_2.send_train(t_2)
+puts '---------------------------'
+
+t_2.go_ahead
+
+trains_to_station
+
+puts "Станция '#{s_3.name}' отправляет поезда"
+s_3.send_train(t_2)
+puts '---------------------------'
+
+t_2.go_ahead
+
+trains_to_station
+
+puts "Станция '#{s_e.name}' отправляет поезда"
 s_e.send_train(t_4)
 puts '---------------------------'
 
-trains_to_station
-
-puts "Станция #{s_1.name} отправляет поезда"
-s_1.send_train(t_1)
-s_1.send_train(t_2)
-s_1.send_train(t_3)
-s_1.send_train(t_4)
-puts '---------------------------'
+t_4.go_ahead
 
 trains_to_station
 
-puts "Станция #{s_2.name} отправляет поезда"
-s_2.send_train(t_1)
-s_2.send_train(t_2)
-s_2.send_train(t_3)
-s_2.send_train(t_4)
-puts '---------------------------'
-
-trains_to_station
-
-puts "Станция #{s_3.name} отправляет поезда"
-s_3.send_train(t_1)
-s_3.send_train(t_2)
-s_3.send_train(t_3)
-s_3.send_train(t_4)
-puts '---------------------------'
-
-trains_to_station
-
-puts "Станция #{s_4.name} отправляет поезда"
-s_4.send_train(t_1)
-s_4.send_train(t_2)
-s_4.send_train(t_3)
+puts "Станция '#{s_4.name}' отправляет поезда"
 s_4.send_train(t_4)
 puts '---------------------------'
+
+t_4.go_ahead
 
 trains_to_station
 
@@ -170,7 +171,7 @@ puts "  на станции: #{t_4.current_station.name}"
 puts "  начать путь к следующей станции: #{t_4.next_station.name}"
 t_4.go_ahead
 puts "  на станции: #{t_4.current_station.name}"
-puts "  вернуться к предудущей станции: #{t_4.prev_station.name}"
+puts "  вернуться к предыдущей станции: #{t_4.prev_station.name}"
 t_4.go_back
 puts "  на станции: #{t_4.current_station.name}"
 puts "  кол-во вагонов: #{t_4.count_carriage}"

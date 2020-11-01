@@ -38,18 +38,9 @@ class Station
     return trains_type_count
   end
 
-  # удаляем поезд из списка станции
+  # отправляем поезд - удаляя поезд из списка станции
   # метод вызывается поездом
-  def remove_train(train)
-    @trains.delete(train) 
-  end
-
-  # отправляем поезд
-  def send_train(train)
-    # только если поезд находиться на этой станции и ему есть куда дальше двигаться
-    if @trains.include?(train) && !train.next_station.nil?
-      train.go_ahead # передаем команду поезду отправиться вперед,
-      remove_train(train)
-    end
+  def send_train(train)  
+    @trains.delete(train)
   end
 end
