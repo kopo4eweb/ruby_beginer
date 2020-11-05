@@ -1,25 +1,27 @@
-# Create stations
-@stations = [ 
-  Station.new("ст. Начальная 1"),
-  Station.new("ст. Начальная 2"),
-  Station.new("ст. Конечная 1"),
-  Station.new("ст. Конечная 2")
-]
+class Seeds
+  def self.init
+    # Create stations
+    Interface.stations << Station.new("ст. Начальная 1")
+    Interface.stations << Station.new("ст. Начальная 2")
+    Interface.stations << Station.new("ст. Конечная 1")
+    Interface.stations << Station.new("ст. Конечная 2")    
 
-5.times { |i| @stations << Station.new("ст. Промежуточная #{i + 1}") }
+    5.times { |i| Interface.stations << Station.new("ст. Промежуточная #{i + 1}") }
 
-# Create routes
-@routes << Route.new(@stations[0], @stations[2])
+    # Create routes
+    Interface.routes << Route.new(Interface.stations[0], Interface.stations[2])
 
-@routes << Route.new(@stations[1], @stations[3])
-@routes.last.add_station(@stations[4])
-@routes.last.add_station(@stations[5])
-@routes.last.add_station(@stations[6])
+    Interface.routes << Route.new(Interface.stations[1], Interface.stations[3])
+    Interface.routes.last.add_station(Interface.stations[4])
+    Interface.routes.last.add_station(Interface.stations[5])
+    Interface.routes.last.add_station(Interface.stations[6])
 
-@routes << Route.new(@stations[0], @stations[3])
-@routes.last.add_station(@stations[7])
-@routes.last.add_station(@stations[8])
+    Interface.routes << Route.new(Interface.stations[0], Interface.stations[3])
+    Interface.routes.last.add_station(Interface.stations[7])
+    Interface.routes.last.add_station(Interface.stations[8])
 
-# Create trains
-@trains << CargoTrain.new('МЕГА грузовой')
-@trains << PassengerTrain.new('Сапсан - коженные мешки')
+    # Create trains
+    Interface.trains << CargoTrain.new('МЕГА грузовой')
+    Interface.trains << PassengerTrain.new('Сапсан - коженные мешки')
+  end
+end

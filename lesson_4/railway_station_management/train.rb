@@ -23,15 +23,11 @@ class Train
 
   # прицеплять вагон
   def add_carriage(carriade)
-    return puts '! Остановите сначала поезд' if speed > 0
-    return puts "! К поезду типа '#{@type}' можно прицеплять вагоны только того же типа" if carriade.type != @type
     @carriages << carriade
   end
   
   # отцеплять вагон
   def remove_carriage
-    return puts '! Остановите сначала поезд' if speed > 0
-    return puts '! У поезда больше нет прицепленных вагонов' if @carriages.empty?
     @carriages.pop
   end
 
@@ -48,8 +44,6 @@ class Train
 
   # поезд движется вперед
   def go_ahead
-    return puts "! Поезд '#{@number}' на конечной станции" if next_station.nil?
-
     # увеличиваем позицию для перемещения по маршруту
     @current_station_position += 1
     
@@ -59,8 +53,6 @@ class Train
 
   # поезд движется назад
   def go_back
-    return puts "! Поезд '#{@number}' на начальной станции" if prev_station.nil?
-
     # уменьшаем позицию для перемещения по маршруту
     @current_station_position -= 1
 
