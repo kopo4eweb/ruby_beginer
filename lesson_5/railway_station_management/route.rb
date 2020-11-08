@@ -1,4 +1,8 @@
+require_relative 'instance_counter'
+
 class Route
+  include InstanceCounter
+
   attr_reader :stations # выводить список всех станций по порядку
 
   def initialize(station_start, station_end)
@@ -6,6 +10,7 @@ class Route
     @station_end = station_end
 
     @stations = [station_start, station_end]
+    register_instance()
   end
 
   # добавление промежуточных станций

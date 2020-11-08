@@ -3,6 +3,7 @@ require_relative 'station'
 class StationsInterface
   def self.menu
     loop do
+      puts "Станций: #{Station.instances}"
       puts 'Введите цифру - выберите действие:'
       puts '1 - Создать станцию'
   
@@ -46,7 +47,8 @@ class StationsInterface
   end
 
   def self.show_stations
-    Interface.stations.each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
+    Station.all().each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
+    # Interface.stations.each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
   end
 
   def self.info

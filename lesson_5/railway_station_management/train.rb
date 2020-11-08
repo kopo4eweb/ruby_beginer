@@ -1,10 +1,22 @@
 require_relative 'types'
+require_relative 'company'
+require_relative 'instance_counter'
 
 class Train
+  include Company
+  include InstanceCounter
+
   attr_reader :number # возвращать номер поезда
   attr_accessor :speed # задавать / возвращать скорость
   attr_accessor :current_station # возвращать / задание текущей станции из объекта станции
   attr_reader :carriages, :type
+
+  @@trains = []
+
+  def self.find(number)
+    @@trains.each { |train| return train if number == train.number }
+    return
+  end
 
   def initialize(number, type)
     @number = number
@@ -14,6 +26,8 @@ class Train
     @route = nil
     @current_station_position = 0
     @current_station = nil
+    @@trains << self
+    register_instance()
   end
 
   # тормозить

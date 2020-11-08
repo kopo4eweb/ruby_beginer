@@ -4,6 +4,7 @@ require_relative 'route_interface'
 class RoutesInterface
   def self.menu
     loop do
+      puts "Маршрутов: #{Route.instances}"
       puts 'Введите цифру - выберите действие:'
       puts '1 - Создать маршрут'
   

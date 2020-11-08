@@ -92,14 +92,26 @@ class TrainInterface
     print '>> '
     type = gets.chomp.to_i
 
+    puts 'Введите название производителя:'
+    print '>> '
+    company = gets.chomp.capitalize
+
     if !TYPE.to_a[type - 1].nil?
       return puts "! К поезду типа '#{@@train.type}' можно прицеплять вагоны только того же типа" if TYPE.to_a[type - 1][0] != @@train.type
     end
   
     if type == 1
-      count.times { @@train.add_carriage(CargoCarriage.new()) }
+      count.times do
+        carriage = CargoCarriage.new()
+        carriage.company = company
+        @@train.add_carriage(carriage)
+      end
     elsif type == 2
-      count.times { @@train.add_carriage(PassengerCarriage.new()) }
+      count.times do
+        carriage = PassengerCarriage.new()
+        carriage.company = company
+        @@train.add_carriage(carriage)
+      end
     else
       puts '! нет такого типа вагонов'
     end

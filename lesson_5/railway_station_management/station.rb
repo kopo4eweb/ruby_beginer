@@ -1,10 +1,22 @@
+require_relative 'instance_counter'
+
 class Station
+  include InstanceCounter
+
   attr_reader :trains # для возврата списка поездов на этой станции
   attr_reader :name
+
+  @@stations = []
+
+  def self.all
+    @@stations
+  end
 
   def initialize(name)
     @name = name
     @trains = []
+    @@stations << self
+    register_instance()
   end
 
   # принятие поезда, добавляем поезд в список поездовб,
