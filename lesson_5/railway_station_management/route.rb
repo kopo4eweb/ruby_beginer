@@ -10,7 +10,7 @@ class Route
     @station_end = station_end
 
     @stations = [station_start, station_end]
-    register_instance()
+    register_instance
   end
 
   # добавление промежуточных станций

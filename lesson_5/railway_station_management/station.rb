@@ -16,7 +16,7 @@ class Station
     @name = name
     @trains = []
     @@stations << self
-    register_instance()
+    register_instance
   end
 
   # принятие поезда, добавляем поезд в список поездовб,

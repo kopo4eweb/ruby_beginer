@@ -27,7 +27,7 @@ class Train
     @current_station_position = 0
     @current_station = nil
     @@trains << self
-    register_instance()
+    register_instance
   end
 
   # тормозить
