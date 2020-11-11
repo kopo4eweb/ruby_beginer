@@ -11,6 +11,8 @@ class Train
   attr_accessor :current_station # возвращать / задание текущей станции из объекта станции
   attr_reader :carriages, :type
 
+  NUMBER_FORMAT = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i
+
   @@trains = []
 
   def self.find(number)
@@ -21,6 +23,7 @@ class Train
   def initialize(number, type)
     @number = number
     @type = type
+    validate!
     @carriages = []
     @speed = 0
     @route = nil
@@ -28,6 +31,18 @@ class Train
     @current_station = nil
     @@trains << self
     register_instance
+  end
+
+  def validate!
+    raise RegexpError, 'Допустимый формат: три буквы или цифры в любом порядке, необязательный дефис (может быть, а может нет) и еще 2 буквы или цифры после дефиса.' if @number !~ NUMBER_FORMAT
+    raise TypeError, 'Нет такого типа поезда' unless TYPE.has_key?(@type)
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   # тормозить

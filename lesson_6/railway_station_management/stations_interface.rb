@@ -16,7 +16,7 @@ class StationsInterface
       print '>> '
   
       operation = gets.chomp
-      operation = -1 if operation.empty?
+      operation = -1 if operation !~ /^\d*$/
   
       puts "\n"
   
@@ -40,24 +40,36 @@ class StationsInterface
     end
   end
 
-  def self.create 
-    puts 'Введите название станции:'
-    print '>> '
-    Interface.stations << Station.new(gets.chomp.capitalize)
+  def self.create
+    begin 
+      puts 'Введите название станции:'
+      print '>> '
+      Interface.stations << Station.new(gets.chomp.capitalize)
+    rescue RegexpError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    end
+
+    puts "Создана станция: #{Interface.stations.last.name}"
   end
 
   def self.show_stations
     Station.all().each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
-    # Interface.stations.each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
   end
 
   def self.info
     show_stations()
     
-    puts "Введите номер станции:"
-    print '>> '
-    station = Interface.stations[gets.chomp.to_i - 1]
-    return puts "\t ! Станции с таким номером не существует!" if station.nil?
+    begin
+      puts "Введите номер станции:"
+      print '>> '
+      index = gets.chomp.to_i
+      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
+      station = Interface.stations[index - 1]
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry 
+    end
     
     print "\t#{station.name}: \n\t"
     station.trains.each { |train| print "#{train.number}, " }

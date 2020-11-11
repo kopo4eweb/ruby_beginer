@@ -13,7 +13,7 @@ class RouteInterface
       print '>> '
 
       operation = gets.chomp
-      operation = -1 if operation.empty?
+      operation = -1 if operation !~ /^\d*$/
 
       puts "\n"
 
@@ -43,23 +43,33 @@ class RouteInterface
   
   def self.add_station
     StationsInterface.show_stations() # показать все станции что есть
-  
-    puts 'Введите номер станции для добавления её в маршрут:'
-    print '>> '
-    station = Interface.stations[gets.chomp.to_i - 1]
-    return puts "\t ! Станции с таким номером не существует!" if station.nil?
 
-    @@route.add_station(station)
+    begin
+      puts 'Введите номер станции для добавления её в маршрут:'
+      print '>> '
+      index = gets.chomp.to_i
+      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
+      station = Interface.stations[index - 1]
+      @@route.add_station(station)
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    end
   end
   
   def self.remove_station
     info(@@route)
-  
-    puts 'Введите номер промежуточной станции для её удаления из маршрута:'
-    print '>> '
-    station = @@route.stations[gets.chomp.to_i - 1]
-    return puts "\t ! Станции с таким номером на маршруте не существует!" if station.nil?
 
-    @@route.remove_station(station)
+    begin
+      puts 'Введите номер промежуточной станции для её удаления из маршрута:'
+      print '>> '
+      index = gets.chomp.to_i
+      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > @@route.stations.length
+      station = @@route.stations[index - 1]
+      @@route.remove_station(station)
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    end
   end
 end

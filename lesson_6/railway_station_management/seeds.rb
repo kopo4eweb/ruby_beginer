@@ -21,10 +21,12 @@ class Seeds
     Interface.routes.last.add_station(Interface.stations[8])
 
     # Create trains
-    cargo_train = CargoTrain.new('МЕГА грузовой')
+    cargo_train = CargoTrain.new('Z4ш4t')
     cargo_train.company = 'Simense'
     Interface.trains << cargo_train
+
+    p cargo_train.valid?
     
-    Interface.trains << PassengerTrain.new('Сапсан - коженные мешки')
+    Interface.trains << PassengerTrain.new('xx6-yy')
   end
 end

@@ -21,13 +21,14 @@ class TrainInterface
         puts '7 - Скорость поезда'
         puts '8 - Задать скорость поезду'
         puts '9 - Остановить поезд'    
+        puts '10 - Проверить на валидность'
       end
 
       puts '0 - Вернуться в меню поездов'
       print '>> '
 
       operation = gets.chomp
-      operation = -1 if operation.empty?
+      operation = -1 if operation !~ /^\d*$/
 
       puts "\n"
 
@@ -54,13 +55,16 @@ class TrainInterface
           go_back()
         when 7
           puts '--> Скорость поезда'
-          puts "\t#{@@train.speed()}"
+          puts "\t#{@@train.speed}"
         when 8
           puts '--> Задать скорость поезду'
           set_speed()
         when 9
           puts '--> Остановить поезд'
           @@train.stop()
+        when 10
+          puts '--> Проверить на валидность'
+          puts "\tДанные поезда #{@@train.valid? ? 'валидны' : 'не валидны'}"
       else
         puts '! Неизвестная операция'
       end
@@ -71,50 +75,74 @@ class TrainInterface
 
   def self.set_route
     RoutesInterface.show_routes()
-  
-    puts 'Введите номер маршрута:'
-    print '>> '
-    route = Interface.routes[gets.chomp.to_i - 1]  
-    return puts '! Маршрута под таким номером не существует' if route.nil?
-    @@train.set_route(route)
+
+    begin
+      puts 'Введите номер маршрута:'
+      print '>> '
+      index = gets.chomp.to_i
+      raise ArgumentError, 'Маршрута с таким номером не существует!' if index <= 0 || index > Interface.routes.length
+      route = Interface.routes[index - 1]
+      @@train.set_route(route)
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    end
   end
   
   def self.add_carriage
     return puts '! Остановите сначала поезд' if @@train.speed > 0
 
-    puts 'Введите кол-во вагонов:'
-    print '>> '
-    count = gets.chomp.to_i
-  
-    puts 'Выберите тип вагонов:'
-    puts '1 - Грузовые'
-    puts '2 - Пассажирские'
-    print '>> '
-    type = gets.chomp.to_i
+    begin
+      puts 'Введите название производителя:'
+      print '>> '
+      company = gets.chomp.strip
+      raise ArgumentError, 'Название компании не может быть пустым' if company.empty?
+      company.capitalize!          
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    end
 
-    puts 'Введите название производителя:'
-    print '>> '
-    company = gets.chomp.capitalize
-
-    if !TYPE.to_a[type - 1].nil?
-      return puts "! К поезду типа '#{@@train.type}' можно прицеплять вагоны только того же типа" if TYPE.to_a[type - 1][0] != @@train.type
+    begin
+      puts 'Введите кол-во вагонов:'
+      print '>> '
+      count = gets.chomp.to_i
+      raise ArgumentError, 'Нельзя прицепить 0 вагонов' if count == 0
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry
     end
   
-    if type == 1
-      count.times do
-        carriage = CargoCarriage.new()
-        carriage.company = company
-        @@train.add_carriage(carriage)
+    begin
+      puts 'Выберите тип вагонов:'
+      puts '1 - Грузовые'
+      puts '2 - Пассажирские'
+      print '>> '
+      type = gets.chomp.to_i
+
+      if !TYPE.to_a[type - 1].nil?
+        raise TypeError, "К поезду типа '#{@@train.type}' можно прицеплять вагоны только того же типа" if TYPE.to_a[type - 1][0] != @@train.type
       end
-    elsif type == 2
-      count.times do
-        carriage = PassengerCarriage.new()
-        carriage.company = company
-        @@train.add_carriage(carriage)
+    
+      if type == 1
+        count.times do
+          carriage = CargoCarriage.new()
+          carriage.company = company
+          @@train.add_carriage(carriage)
+        end
+      elsif type == 2
+        count.times do
+          carriage = PassengerCarriage.new()
+          carriage.company = company
+          @@train.add_carriage(carriage)
+        end
+      else
+        raise TypeError, 'Нет такого типа вагонов'
       end
-    else
-      puts '! нет такого типа вагонов'
-    end
+    rescue TypeError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    end   
 
     puts "\tВсего вагонов: #{@@train.carriages.size}"
   end
@@ -122,13 +150,19 @@ class TrainInterface
   def self.remove_carriage
     return puts '! Остановите сначала поезд' if @@train.speed > 0
 
-    puts 'Введите кол-во вагонов:'
-    print '>> '
-    count = gets.chomp.to_i
+    begin
+      puts 'Введите кол-во вагонов:'
+      print '>> '
+      count = gets.chomp.to_i
+      raise ArgumentError, 'Нельзя отцуплять 0 вагонов' if count == 0
 
-    if count > @@train.carriages.size
-      puts "! К поезду прицеплено только #{@@train.carriages.size}, столько и будет отцеплено"
-      count = @@train.carriages.size
+      if count > @@train.carriages.size
+        puts "! К поезду прицеплено только #{@@train.carriages.size}, столько и будет отцеплено"
+        count = @@train.carriages.size
+      end      
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry
     end
 
     count.times { @@train.remove_carriage() }

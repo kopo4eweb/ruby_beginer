@@ -6,6 +6,8 @@ class Station
   attr_reader :trains # для возврата списка поездов на этой станции
   attr_reader :name
 
+  NAME_FORMAT = /^[а-яa-z0-9\-\.\ ]{2,}$/i
+
   @@stations = []
 
   def self.all
@@ -14,9 +16,21 @@ class Station
 
   def initialize(name)
     @name = name
+    validate!
     @trains = []
     @@stations << self
     register_instance
+  end
+
+  def validate!
+    raise RegexpError, "Допустииый формат для имени станции: минимум 2 символа, буквы, цифры, знаки: минус, точка, пробел" if @name !~ NAME_FORMAT
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   # принятие поезда, добавляем поезд в список поездовб,

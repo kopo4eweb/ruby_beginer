@@ -23,7 +23,7 @@ class Interface
       print '>> '
 
       operation = gets.chomp
-      operation = -1 if operation.empty?
+      operation = -1 if operation !~ /^\d*$/
 
       puts "\n"
 

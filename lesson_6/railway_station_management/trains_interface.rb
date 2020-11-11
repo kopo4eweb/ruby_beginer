@@ -14,7 +14,7 @@ class TrainsInterface
       print '>> '
   
       operation = gets.chomp
-      operation = -1 if operation.empty?
+      operation = -1 if operation !~ /^\d*$/
   
       puts "\n"
   
@@ -39,33 +39,41 @@ class TrainsInterface
   end
 
   def self.create
-    puts 'Введите номер поезда:'
-    print '>> '
-    number = gets.chomp
-  
-    puts 'Выберите тип поезда:'
-    puts '1 - Грузовой'
-    puts '2 - Пассажирский'
-    print '>> '
-    type = gets.chomp.to_i
-
-    puts 'Введите название производителя:'
-    print '>> '
-    company = gets.chomp.capitalize
+    begin
+      puts 'Введите номер поезда:'
+      print '>> '
+      number = gets.chomp
     
-    if type == 1
-      train = CargoTrain.new(number)
-      train.company = company
-      Interface.trains << train
-    elsif type == 2
-      train = PassengerTrain.new(number)
-      train.company = company
-      Interface.trains << train
-    else
-      puts '! нет такого типа поезда'
+      puts 'Выберите тип поезда:'
+      puts '1 - Грузовой'
+      puts '2 - Пассажирский'
+      print '>> '
+      type = gets.chomp.to_i
+
+      puts 'Введите название производителя:'
+      print '>> '
+      company = gets.chomp.capitalize
+      
+      if type == 1
+        train = CargoTrain.new(number)
+        train.company = company
+        Interface.trains << train
+      elsif type == 2
+        train = PassengerTrain.new(number)
+        train.company = company
+        Interface.trains << train
+      else
+        raise TypeError, 'Нет такого типа поезда'
+      end
+    rescue RegexpError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    rescue TypeError => e
+      puts "! Ошибка: #{e.message}"
+      retry
     end
 
-    p Interface.trains
+    puts "Добавлен поезд под момером: #{train.number}, тип: #{train.type}"
   end
   
   def self.list
@@ -75,12 +83,18 @@ class TrainsInterface
   
   def self.select
     list()
-  
-    puts 'Введите номер поезда:'
-    print '>> '
-    train = Interface.trains[gets.chomp.to_i - 1]
-    return puts '! Поезда под таким номером не существует' if train.nil?
-    return train
+    
+    begin
+      puts 'Введите номер поезда:'
+      print '>> '
+      index = gets.chomp.to_i
+      raise ArgumentError, 'Поезда под таким номером не существует' if index <= 0 || index > Interface.trains.length
+      train = Interface.trains[index - 1]
+      return train
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry
+    end
   end
 
   def self.find
