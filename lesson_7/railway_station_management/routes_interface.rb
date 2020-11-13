@@ -41,31 +41,28 @@ class RoutesInterface
     end
   end
 
+  def self.select_station(mess, &block)
+    begin
+      puts mess
+      print '>> '
+      index = gets.chomp.to_i
+      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
+      yield(index - 1)
+    rescue ArgumentError => e
+      puts "! Ошибка: #{e.message}"
+      retry 
+    end
+  end
+
   def self.create
     StationsInterface.show_stations() # показать все станции что есть
+    
+    first = nil
+    last = nil
 
-    begin
-      puts 'Введите номер начальной станции:'
-      print '>> '
-      index = gets.chomp.to_i
-      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
-      first = Interface.stations[index - 1]
-    rescue ArgumentError => e
-      puts "! Ошибка: #{e.message}"
-      retry 
-    end
-      
-    begin
-      puts 'Введите номер конечной станции:'
-      print '>> '
-      index = gets.chomp.to_i
-      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
-      last = Interface.stations[index - 1]
-    rescue ArgumentError => e
-      puts "! Ошибка: #{e.message}"
-      retry 
-    end
-  
+    select_station('Введите порядковый номер начальной станции:') { |index| first = Interface.stations[index] }
+    select_station('Введите порядковый номер конечной станции:') { |index| last = Interface.stations[index] }
+
     Interface.routes << Route.new(first, last)
   end
   
@@ -80,7 +77,7 @@ class RoutesInterface
     show_routes()
 
     begin
-      puts 'Введите номер маршрута:'
+      puts 'Введите порядковый номер маршрута:'
       print '>> '
       index = gets.chomp.to_i
       raise ArgumentError, 'Маршрута с таким номером не существует' if index <= 0 || index > Interface.routes.length

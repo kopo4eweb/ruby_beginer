@@ -8,8 +8,12 @@ class TrainsInterface
       puts "Поездов: Грз[#{CargoTrain.instances}], Пасж[#{PassengerTrain.instances}], без указания типа[#{Train.instances}]"
       puts 'Введите цифру - выберите действие:'
       puts '1 - Создать поезд'
-      puts '2 - Выбрать поезд, перейти к операциям с ним' if Interface.trains.size > 0
-      puts '3 - Найти поезд по его номеру' if Interface.trains.size > 0
+
+      if Interface.trains.size > 0
+        puts '2 - Выбрать поезд, перейти к операциям с ним' 
+        puts '3 - Найти поезд по его номеру'
+      end
+      
       puts '0 - Вернуться в главное меню'
       print '>> '
   
@@ -73,7 +77,7 @@ class TrainsInterface
       retry
     end
 
-    puts "Добавлен поезд под момером: #{train.number}, тип: #{train.type}"
+    puts "Добавлен поезд под номером: #{train.number}, тип: #{train.type}"
   end
   
   def self.list
@@ -85,7 +89,7 @@ class TrainsInterface
     list()
     
     begin
-      puts 'Введите номер поезда:'
+      puts 'Введите порядковый номер поезда:'
       print '>> '
       index = gets.chomp.to_i
       raise ArgumentError, 'Поезда под таким номером не существует' if index <= 0 || index > Interface.trains.length

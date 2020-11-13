@@ -24,9 +24,43 @@ class Seeds
     cargo_train = CargoTrain.new('Z4ш4t')
     cargo_train.company = 'Simense'
     Interface.trains << cargo_train
+    Interface.trains.last.set_route(Interface.routes[0])
+    # p cargo_train.valid?
+    1.upto(7) do |i| 
+      carriage = CargoCarriage.new(10 + i)
+      carriage.company = 'Cargo Builder Inc.'
+      cargo_train.add_carriage(carriage) 
+    end
+    # p cargo_train.carriages
+    cargo_train.get_carriages { |carriage| p carriage.add_unit }
+    # p cargo_train.carriages
 
-    p cargo_train.valid?
-    
+    puts '--------------------'
+      
     Interface.trains << PassengerTrain.new('xx6-yy')
+    train = Interface.trains.last
+    train.set_route(Interface.routes[1])
+    1.upto(3) do |i| 
+      carriage = PassengerCarriage.new(20 + i * 2)
+      carriage.company = 'Pass Dev Inc.'
+      train.add_carriage(carriage) 
+    end
+    # p train.carriages
+    
+    Interface.trains << CargoTrain.new('123-v5')
+    train = Interface.trains.last
+    train.set_route(Interface.routes[1])
+    # p train.carriages
+    
+    Interface.trains << PassengerTrain.new('67u-ew')
+    train = Interface.trains.last
+    train.set_route(Interface.routes[2])
+    # p train.carriages
+    
+    # Stations
+    # Interface.stations[0].get_trains { |train| p train }
+    # Interface.stations[1].get_trains { |train| p train.number }
+    Interface.stations[1].get_trains { |train| train.go_ahead }
+    # Interface.stations[0].get_trains { |train| train.speed = 33 }
   end
 end

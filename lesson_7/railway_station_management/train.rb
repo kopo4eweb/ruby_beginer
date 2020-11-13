@@ -33,16 +33,18 @@ class Train
     register_instance
   end
 
-  def validate!
-    raise RegexpError, 'Допустимый формат: три буквы или цифры в любом порядке, необязательный дефис (может быть, а может нет) и еще 2 буквы или цифры после дефиса.' if @number !~ NUMBER_FORMAT
-    raise TypeError, 'Нет такого типа поезда' unless TYPE.has_key?(@type)
-  end
-
   def valid?
     validate!
     true
   rescue
     false
+  end
+
+  # написать метод, который принимает блок и проходит по всем вагонам поезда (вагоны должны быть во внутреннем массиве), передавая каждый объект вагона в блок.
+  def get_carriages(&block)
+    if block_given?
+      @carriages.each_with_index { |carriage, index| yield(carriage, index + 1) }
+    end
   end
 
   # тормозить
@@ -56,8 +58,8 @@ class Train
   end
   
   # отцеплять вагон
-  def remove_carriage
-    @carriages.pop
+  def remove_carriage(index)
+    @carriages.delete_at(index)
   end
 
   # назначение маршрута поезду
@@ -102,6 +104,11 @@ class Train
   # эти методы вызываются только в методах внутри оъекта, они не должны вызываться из вне объекта
   # они не переназначаются в дочерних классах, поэтому они сделаны private а не protected
   private
+    def validate!
+      raise RegexpError, 'Допустимый формат: три буквы или цифры в любом порядке, необязательный дефис (может быть, а может нет) и еще 2 буквы или цифры после дефиса.' if @number !~ NUMBER_FORMAT
+      raise TypeError, 'Нет такого типа поезда' unless TYPE.has_key?(@type)
+    end
+
     # занесение поезда в список поездов станции
     def add_train_to_station_list
       @route.stations[@current_station_position].accept_train(self)

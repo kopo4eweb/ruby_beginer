@@ -41,35 +41,35 @@ class RouteInterface
     route.stations.each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
   end
   
-  def self.add_station
-    StationsInterface.show_stations() # показать все станции что есть
-
+  def self.select(mess, obj, &block)
     begin
-      puts 'Введите номер станции для добавления её в маршрут:'
+      puts mess
       print '>> '
       index = gets.chomp.to_i
-      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
-      station = Interface.stations[index - 1]
-      @@route.add_station(station)
+      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > obj.length
+      station = obj[index - 1]
+      yield(station)
     rescue ArgumentError => e
       puts "! Ошибка: #{e.message}"
       retry
     end
   end
+
+  def self.add_station
+    StationsInterface.show_stations() # показать все станции что есть
+
+    select(
+      'Введите порядковый номер станции для добавления её в маршрут:', 
+      Interface.stations
+      ) { |station| @@route.add_station(station) }
+  end
   
   def self.remove_station
     info(@@route)
 
-    begin
-      puts 'Введите номер промежуточной станции для её удаления из маршрута:'
-      print '>> '
-      index = gets.chomp.to_i
-      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > @@route.stations.length
-      station = @@route.stations[index - 1]
-      @@route.remove_station(station)
-    rescue ArgumentError => e
-      puts "! Ошибка: #{e.message}"
-      retry
-    end
+    select(
+      'Введите порядковый номер промежуточной станции для её удаления из маршрута:', 
+      @@route.stations
+      ) { |station| @@route.remove_station(station) }
   end
 end

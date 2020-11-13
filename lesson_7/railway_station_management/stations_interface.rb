@@ -9,7 +9,7 @@ class StationsInterface
   
       if Interface.stations.size > 0
         puts '2 - Список всех станций'
-        puts '3 - Список поездов на станции'
+        puts '3 - Список поездов на станциях'
       end
   
       puts '0 - Вернуться в главное меню'
@@ -30,7 +30,7 @@ class StationsInterface
           puts '--> Список всех станцый'
           show_stations()
         when 3
-          puts '--> Информация по станции'
+          puts '--> Информация по станциям'
           info()
       else
         puts '! Неизвестная операция'
@@ -58,21 +58,12 @@ class StationsInterface
   end
 
   def self.info
-    show_stations()
-    
-    begin
-      puts "Введите номер станции:"
-      print '>> '
-      index = gets.chomp.to_i
-      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
-      station = Interface.stations[index - 1]
-    rescue ArgumentError => e
-      puts "! Ошибка: #{e.message}"
-      retry 
+    Interface.stations.each do |station|
+      puts "Станция: #{station.name}"
+      station.get_trains do |train| 
+        puts "\tПоезд: #{train.number}, тип: #{train.type}, прицеплено вагонов: #{train.carriages.size}"
+        Templates.show_carriage(train)
+      end
     end
-    
-    print "\t#{station.name}: \n\t"
-    station.trains.each { |train| print "#{train.number}, " }
-    puts "\n\tСколько и каких типов поезда стоят на станции: #{station.trains_list_type}" if !station.trains_list_type.empty?  
   end
 end
