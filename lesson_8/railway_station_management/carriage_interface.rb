@@ -25,20 +25,20 @@ class CarriageInterface
       puts "\n"
   
       case operation.to_i
-        when 0
-          break
-        when 1
-          puts '--> Прицепить вагон к поезду'
-          add()
-        when 2
-          puts '--> Отцепить вагон от поезда'
-          remove()
-        when 3
-          puts '--> Заполнить вагон'
-          add_unit()
-        when 4
-          puts '--> Вывести все вагоны поезда'
-          Templates.show_carriage(@@train)
+      when 0
+        break
+      when 1
+        puts '--> Прицепить вагон к поезду'
+        add()
+      when 2
+        puts '--> Отцепить вагон от поезда'
+        remove()
+      when 3
+        puts '--> Заполнить вагон'
+        add_unit()
+      when 4
+        puts '--> Вывести все вагоны поезда'
+        Templates.show_carriage(@@train)
       else
         puts '! Неизвестная операция'
       end
@@ -54,7 +54,10 @@ class CarriageInterface
       puts 'Введите название производителя:'
       print '>> '
       company = gets.chomp.strip
-      raise ArgumentError, 'Название компании не может быть пустым' if company.empty?
+      raise(
+        ArgumentError,
+        'Название компании не может быть пустым'
+        ) if company.empty?
       company.capitalize!          
     rescue ArgumentError => e
       puts "! Ошибка: #{e.message}"
@@ -69,10 +72,14 @@ class CarriageInterface
       type = gets.chomp.to_i
 
       if !TYPE.to_a[type - 1].nil?
-        raise TypeError, "К поезду типа '#{@@train.type}' можно прицеплять вагоны только того же типа" if TYPE.to_a[type - 1][0] != @@train.type
+        raise(
+          TypeError,
+          "К поезду типа '#{@@train.type}' можно " \
+          "прицеплять вагоны только того же типа"
+          ) if TYPE.to_a[type - 1][0] != @@train.type
       end
     
-      input_carriage_block = Proc.new do |mess, class_carriage|
+      input_carriage_block = proc do |mess, class_carriage|
         begin
           puts mess
           print '>> '
@@ -88,9 +95,15 @@ class CarriageInterface
       end
 
       if type == 1
-        input_carriage_block.call('Введите объем грузового вагона:', CargoCarriage)
+        input_carriage_block.call(
+          'Введите объем грузового вагона:',
+          CargoCarriage
+        )
       elsif type == 2
-        input_carriage_block.call('Введите кол-во мест в вагоне:', PassengerCarriage)
+        input_carriage_block.call(
+          'Введите кол-во мест в вагоне:',
+          PassengerCarriage
+        )
       else
         raise TypeError, 'Нет такого типа вагонов'
       end
@@ -109,7 +122,10 @@ class CarriageInterface
       puts 'Введите порядковый номер вагона:'
       print '>> '
       index = gets.chomp.to_i
-      raise ArgumentError, 'Вагона под таким номером не существует' if index <= 0 || index > @@train.carriages.length
+      raise(
+        ArgumentError,
+        'Вагона под таким номером не существует'
+        ) if index <= 0 || index > @@train.carriages.length
       yield(index - 1)
     rescue ArgumentError => e
       puts "! Ошибка: #{e.message}"

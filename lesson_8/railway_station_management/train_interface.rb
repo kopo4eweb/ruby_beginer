@@ -31,35 +31,35 @@ class TrainInterface
       puts "\n"
 
       case operation.to_i
-        when 0
-          break
-        when 1
-          puts '--> Назначить маршрут поезду'
-          set_route()
-        when 2
-          puts '--> Операции с вагонами'
-          CarriageInterface.menu(@@train)
-        when 3
-          puts '--> Поезд находится на станции'
-          puts "\t#{@@train.current_station.name}"
-        when 4
-          puts '--> Двигаться вперед'
-          go_ahead()
-        when 5
-          puts '--> Двигаться назад'
-          go_back()
-        when 6
-          puts '--> Скорость поезда'
-          puts "\t#{@@train.speed}"
-        when 7
-          puts '--> Задать скорость поезду'
-          set_speed()
-        when 8
-          puts '--> Остановить поезд'
-          @@train.stop()
-        when 9
-          puts '--> Проверить на валидность'
-          puts "\tДанные поезда #{@@train.valid? ? 'валидны' : 'не валидны'}"
+      when 0
+        break
+      when 1
+        puts '--> Назначить маршрут поезду'
+        set_route()
+      when 2
+        puts '--> Операции с вагонами'
+        CarriageInterface.menu(@@train)
+      when 3
+        puts '--> Поезд находится на станции'
+        puts "\t#{@@train.current_station.name}"
+      when 4
+        puts '--> Двигаться вперед'
+        go_ahead()
+      when 5
+        puts '--> Двигаться назад'
+        go_back()
+      when 6
+        puts '--> Скорость поезда'
+        puts "\t#{@@train.speed}"
+      when 7
+        puts '--> Задать скорость поезду'
+        set_speed()
+      when 8
+        puts '--> Остановить поезд'
+        @@train.stop()
+      when 9
+        puts '--> Проверить на валидность'
+        puts "\tДанные поезда #{@@train.valid? ? 'валидны' : 'не валидны'}"
       else
         puts '! Неизвестная операция'
       end
@@ -75,7 +75,10 @@ class TrainInterface
       puts 'Введите номер маршрута:'
       print '>> '
       index = gets.chomp.to_i
-      raise ArgumentError, 'Маршрута с таким номером не существует!' if index <= 0 || index > Interface.routes.length
+      raise(
+        ArgumentError,
+        'Маршрута с таким номером не существует!'
+        ) if index <= 0 || index > Interface.routes.length
       route = Interface.routes[index - 1]
       @@train.set_route(route)
     rescue ArgumentError => e
@@ -85,13 +88,17 @@ class TrainInterface
   end
 
   def self.go_ahead
-    return puts "! Поезд '#{@@train.number}' на конечной станции: #{@@train.current_station.name}" if @@train.next_station.nil?
+    return puts "! Поезд '#{@@train.number}' на конечной станции: " \
+    "#{@@train.current_station.name}" if @@train.next_station.nil?
+    
     @@train.go_ahead()
     puts "\tПоезд прибыл на странцию: #{@@train.current_station.name}"
   end
 
   def self.go_back
-    return puts "! Поезд '#{@@train.number}' на начальной станции: #{@@train.current_station.name}" if @@train.prev_station.nil?
+    return puts "! Поезд '#{@@train.number}' на начальной станции: " \
+    "#{@@train.current_station.name}" if @@train.prev_station.nil?
+
     @@train.go_back()
     puts "\tПоезд прибыл на странцию: #{@@train.current_station.name}"
   end

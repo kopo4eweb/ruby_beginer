@@ -18,17 +18,17 @@ class RouteInterface
       puts "\n"
 
       case operation.to_i
-        when 0
-          break
-        when 1
-          puts '--> Список станций на маршруте'
-          info(@@route)
-        when 2
-          puts '--> Добавить станцию на маршрут'
-          add_station()
-        when 3
-          puts '--> Удалить станцию с маршрута'
-          remove_station()
+      when 0
+        break
+      when 1
+        puts '--> Список станций на маршруте'
+        info(@@route)
+      when 2
+        puts '--> Добавить станцию на маршрут'
+        add_station()
+      when 3
+        puts '--> Удалить станцию с маршрута'
+        remove_station()
       else
         puts '! Неизвестная операция'
       end
@@ -38,7 +38,9 @@ class RouteInterface
   end
 
   def self.info(route)  
-    route.stations.each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
+    route.stations.each_with_index do |station, index|
+      puts "\t#{index + 1} - #{station.name}"
+    end
   end
   
   def self.select(mess, obj, &block)
@@ -46,7 +48,10 @@ class RouteInterface
       puts mess
       print '>> '
       index = gets.chomp.to_i
-      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > obj.length
+      raise(
+        ArgumentError,
+        'Станции с таким номером не существует'
+        ) if index <= 0 || index > obj.length
       station = obj[index - 1]
       yield(station)
     rescue ArgumentError => e
@@ -56,10 +61,10 @@ class RouteInterface
   end
 
   def self.add_station
-    StationsInterface.show_stations() # показать все станции что есть
+    StationsInterface.show_stations()
 
     select(
-      'Введите порядковый номер станции для добавления её в маршрут:', 
+      'Введите порядковый номер станции для добавления её в маршрут:',
       Interface.stations
       ) { |station| @@route.add_station(station) }
   end
@@ -68,7 +73,8 @@ class RouteInterface
     info(@@route)
 
     select(
-      'Введите порядковый номер промежуточной станции для её удаления из маршрута:', 
+      'Введите порядковый номер промежуточной станции для её удаления ' \
+      'из маршрута:',
       @@route.stations
       ) { |station| @@route.remove_station(station) }
   end

@@ -5,7 +5,10 @@ require_relative 'train_interface'
 class TrainsInterface
   def self.menu
     loop do
-      puts "Поездов: Грз[#{CargoTrain.instances}], Пасж[#{PassengerTrain.instances}], без указания типа[#{Train.instances}]"
+      puts "Поездов: Грз[#{CargoTrain.instances}], " \
+      "Пасж[#{PassengerTrain.instances}], " \
+      "без указания типа[#{Train.instances}]"
+
       puts 'Введите цифру - выберите действие:'
       puts '1 - Создать поезд'
 
@@ -23,17 +26,17 @@ class TrainsInterface
       puts "\n"
   
       case operation.to_i
-        when 0
-          break
-        when 1
-          puts '--> Создать поезд'
-          create()
-        when 2
-          puts '--> Выбрать поезд, операции с ним'        
-          TrainInterface.menu(select())
-        when 3
-          puts '--> Найти поезд по его номеру'
-          find()
+      when 0
+        break
+      when 1
+        puts '--> Создать поезд'
+        create()
+      when 2
+        puts '--> Выбрать поезд, операции с ним'        
+        TrainInterface.menu(select())
+      when 3
+        puts '--> Найти поезд по его номеру'
+        find()
       else
         puts '! Неизвестная операция'
       end
@@ -82,7 +85,10 @@ class TrainsInterface
   
   def self.list
     puts 'Список поездов:'
-    Interface.trains.each_with_index { |train, index| puts "\t#{index + 1} - #{train.number} (#{train.company.nil? ? '-' : train.company})" }
+    Interface.trains.each_with_index do |train, index|
+      puts "\t#{index + 1} - #{train.number} " \
+      "(#{train.company.nil? ? '-' : train.company})"
+    end
   end
   
   def self.select
@@ -92,7 +98,10 @@ class TrainsInterface
       puts 'Введите порядковый номер поезда:'
       print '>> '
       index = gets.chomp.to_i
-      raise ArgumentError, 'Поезда под таким номером не существует' if index <= 0 || index > Interface.trains.length
+      raise(
+        ArgumentError,
+        'Поезда под таким номером не существует'
+        ) if index <= 0 || index > Interface.trains.length
       train = Interface.trains[index - 1]
       return train
     rescue ArgumentError => e

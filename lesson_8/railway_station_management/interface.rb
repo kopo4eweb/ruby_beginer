@@ -29,17 +29,17 @@ class Interface
       puts "\n"
 
       case operation.to_i
-        when 0
-          break
-        when 1
-          puts '--> Операции со станциями'
-          StationsInterface.menu()
-        when 2
-          puts '--> Оперции с маршрутами'
-          RoutesInterface.menu()
-        when 3
-          puts '--> Оперции с поездами'
-          TrainsInterface.menu()
+      when 0
+        break
+      when 1
+        puts '--> Операции со станциями'
+        StationsInterface.menu()
+      when 2
+        puts '--> Оперции с маршрутами'
+        RoutesInterface.menu()
+      when 3
+        puts '--> Оперции с поездами'
+        TrainsInterface.menu()
       else
         puts '! Неизвестная операция'
       end

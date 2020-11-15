@@ -6,7 +6,9 @@ class Seeds
     Interface.stations << Station.new("ст. Конечная 1")
     Interface.stations << Station.new("ст. Конечная 2")    
 
-    5.times { |i| Interface.stations << Station.new("ст. Промежуточная #{i + 1}") }
+    5.times do |i| 
+      Interface.stations << Station.new("ст. Промежуточная #{i + 1}")
+    end
 
     # Create routes
     Interface.routes << Route.new(Interface.stations[0], Interface.stations[2])

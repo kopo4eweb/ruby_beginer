@@ -3,10 +3,10 @@ require_relative 'instance_counter'
 class Station
   include InstanceCounter
 
-  attr_reader :trains # для возврата списка поездов на этой станции
-  attr_reader :name
-
   NAME_FORMAT = /^[а-яa-z0-9\-\.\ ]{2,}$/i
+
+  attr_reader :trains
+  attr_reader :name
 
   @@stations = []
 
@@ -23,7 +23,11 @@ class Station
   end
 
   def validate!
-    raise RegexpError, "Допустииый формат для имени станции: минимум 2 символа, буквы, цифры, знаки: минус, точка, пробел" if @name !~ NAME_FORMAT
+    raise(
+      RegexpError,
+      'Допустииый формат для имени станции: минимум 2 символа, ' \
+      'буквы, цифры, знаки: минус, точка, пробел'
+      ) if @name !~ NAME_FORMAT
   end
 
   def valid?
@@ -33,14 +37,15 @@ class Station
     false
   end
 
-  # написать метод, который принимает блок и проходит по всем поездам на станции, передавая каждый поезд в блок.
+  # написать метод, который принимает блок и проходит по всем 
+  # поездам на станции, передавая каждый поезд в блок.
   def get_trains(&block)
     if block_given?
       @trains.each { |train| yield(train) }
     end
   end
 
-  # принятие поезда, добавляем поезд в список поездовб,
+  # принятие поезда, добавляем поезд в список поездов,
   # метод вызывается поездом
   def accept_train(train)
     @trains << train
@@ -48,19 +53,6 @@ class Station
     # передаем текущую станцию в поезд для запоминания
     train.current_station = self
   end
-
-  # возврящает хеш поездов на странции с кол-м поездов каждого типа
-  # ! нигде не используется, раньше использовался в подсчете типов поездов в интерфейсе, заменен новым функционалом 
-  # ! пока оставлю, в будущем возможно будет использован
-  # def trains_list_type
-  #   trains_type_count = Hash.new(0)
-
-  #   @trains.each do |train|
-  #     trains_type_count[train.type] += 1
-  #   end
-
-  #   return trains_type_count
-  # end
 
   # отправляем поезд - удаляя поезд из списка станции
   # метод вызывается поездом

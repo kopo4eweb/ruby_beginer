@@ -3,7 +3,7 @@ require_relative 'instance_counter'
 class Route
   include InstanceCounter
 
-  attr_reader :stations # выводить список всех станций по порядку
+  attr_reader :stations
 
   def initialize(station_start, station_end)
     @station_start = station_start
@@ -20,6 +20,8 @@ class Route
 
   # удаление промежуточных станций
   def remove_station(station)
-    @stations.delete(station) unless station == @station_start || station == @station_end
+    unless station.equal?(@station_start) || station.equal?(@station_end)
+      @stations.delete(station)
+    end
   end
 end

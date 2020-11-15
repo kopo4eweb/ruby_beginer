@@ -22,17 +22,17 @@ class RoutesInterface
       puts "\n"
   
       case operation.to_i
-        when 0
-          break
-        when 1
-          puts '--> Создать маршрут'
-          create()
-        when 2
-          puts '--> Список всех маршрутов'
-          show_routes()
-        when 3
-          puts '--> Выбрать маршрут, оперции с ним'
-          RouteInterface.menu(select())
+      when 0
+        break
+      when 1
+        puts '--> Создать маршрут'
+        create()
+      when 2
+        puts '--> Список всех маршрутов'
+        show_routes()
+      when 3
+        puts '--> Выбрать маршрут, оперции с ним'
+        RouteInterface.menu(select())
       else
         puts '! Неизвестная операция'
       end
@@ -46,7 +46,10 @@ class RoutesInterface
       puts mess
       print '>> '
       index = gets.chomp.to_i
-      raise ArgumentError, 'Станции с таким номером не существует' if index <= 0 || index > Interface.stations.length
+      raise(
+        ArgumentError,
+        'Станции с таким номером не существует'
+        ) if index <= 0 || index > Interface.stations.length
       yield(index - 1)
     rescue ArgumentError => e
       puts "! Ошибка: #{e.message}"
@@ -55,13 +58,18 @@ class RoutesInterface
   end
 
   def self.create
-    StationsInterface.show_stations() # показать все станции что есть
+    StationsInterface.show_stations()
     
     first = nil
     last = nil
 
-    select_station('Введите порядковый номер начальной станции:') { |index| first = Interface.stations[index] }
-    select_station('Введите порядковый номер конечной станции:') { |index| last = Interface.stations[index] }
+    select_station(
+      'Введите порядковый номер начальной станции:'
+      ) { |index| first = Interface.stations[index] }
+
+    select_station(
+      'Введите порядковый номер конечной станции:'
+      ) { |index| last = Interface.stations[index] }
 
     Interface.routes << Route.new(first, last)
   end
@@ -80,7 +88,10 @@ class RoutesInterface
       puts 'Введите порядковый номер маршрута:'
       print '>> '
       index = gets.chomp.to_i
-      raise ArgumentError, 'Маршрута с таким номером не существует' if index <= 0 || index > Interface.routes.length
+      raise(
+        ArgumentError,
+        'Маршрута с таким номером не существует'
+        ) if index <= 0 || index > Interface.routes.length
       return Interface.routes[index - 1]
     rescue ArgumentError => e
       puts "! Ошибка: #{e.message}"

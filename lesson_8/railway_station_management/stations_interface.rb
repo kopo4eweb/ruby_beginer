@@ -21,17 +21,17 @@ class StationsInterface
       puts "\n"
   
       case operation.to_i
-        when 0
-          break
-        when 1
-          puts '--> Создать станцию'
-          create()
-        when 2
-          puts '--> Список всех станцый'
-          show_stations()
-        when 3
-          puts '--> Информация по станциям'
-          info()
+      when 0
+        break
+      when 1
+        puts '--> Создать станцию'
+        create()
+      when 2
+        puts '--> Список всех станцый'
+        show_stations()
+      when 3
+        puts '--> Информация по станциям'
+        info()
       else
         puts '! Неизвестная операция'
       end
@@ -54,14 +54,17 @@ class StationsInterface
   end
 
   def self.show_stations
-    Station.all().each_with_index { |station, index| puts "\t#{index + 1} - #{station.name}" }
+    Station.all().each_with_index do |station, index|
+      puts "\t#{index + 1} - #{station.name}"
+    end
   end
 
   def self.info
     Interface.stations.each do |station|
       puts "Станция: #{station.name}"
       station.get_trains do |train| 
-        puts "\tПоезд: #{train.number}, тип: #{train.type}, прицеплено вагонов: #{train.carriages.size}"
+        puts "\tПоезд: #{train.number}, тип: #{train.type}, " \
+        "прицеплено вагонов: #{train.carriages.size}"
         Templates.show_carriage(train)
       end
     end
