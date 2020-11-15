@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'instance_counter'
 
+# structure of route
 class Route
   include InstanceCounter
 
@@ -13,15 +16,11 @@ class Route
     register_instance
   end
 
-  # добавление промежуточных станций
   def add_station(station)
     @stations.insert(-2, station)
   end
 
-  # удаление промежуточных станций
   def remove_station(station)
-    unless station.equal?(@station_start) || station.equal?(@station_end)
-      @stations.delete(station)
-    end
+    @stations.delete(station) unless station.equal?(@station_start) || station.equal?(@station_end)
   end
 end

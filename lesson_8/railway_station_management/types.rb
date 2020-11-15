@@ -1,2 +1,4 @@
-# используются для указания одинаковых типов поездам и вагонам
-TYPE = { cargo: :cargo, passenger: :passenger }
+# frozen_string_literal: true
+
+# general types for set train ans carriage
+TYPE = { cargo: :cargo, passenger: :passenger }.freeze

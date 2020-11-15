@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
+# tempaltes for interfeces
 class Templates
   def self.show_carriage(train)
-    train.get_carriages do |carriage, i| 
+    train.get_carriages do |carriage, i|
       puts "\t\tВагон: ##{i}, " \
       "тип: #{carriage.type}, " \
       "производитель: #{carriage.company}, " \

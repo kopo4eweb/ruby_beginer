@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require_relative 'types'
 require_relative 'company'
 
+# base class carriage
 class Carriage
   include Company
 
@@ -14,6 +17,7 @@ class Carriage
 
   def add_unit
     raise ArgumentError, 'Вагон заполнен' if @max_units.zero?
+
     @units += 1
     @max_units -= 1
   end

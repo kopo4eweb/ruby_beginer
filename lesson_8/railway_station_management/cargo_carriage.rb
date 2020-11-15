@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'carriage'
 
+# type carriage is cargo
 class CargoCarriage < Carriage
   def initialize(max_units)
     @max_units = max_units
