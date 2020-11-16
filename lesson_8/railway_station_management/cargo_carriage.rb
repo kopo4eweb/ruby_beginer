@@ -13,6 +13,7 @@ class CargoCarriage < Carriage
   private
 
   def validate!
-    raise ArgumentError, 'Не задан объем вагона' if @max_units.to_i <= 0
+    error_message = 'Не задан объем вагона'
+    raise ArgumentError, error_message if @max_units.to_i <= 0
   end
 end

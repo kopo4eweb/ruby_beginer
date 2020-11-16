@@ -16,7 +16,8 @@ class Carriage
   end
 
   def add_unit
-    raise ArgumentError, 'Вагон заполнен' if @max_units.zero?
+    error_message = 'Вагон заполнен'
+    raise ArgumentError, error_message if @max_units.zero?
 
     @units += 1
     @max_units -= 1

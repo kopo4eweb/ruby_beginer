@@ -1,23 +1,29 @@
+# frozen_string_literal: true
+
 require_relative 'types'
 require_relative 'company'
 require_relative 'instance_counter'
 
+# base class
 class Train
   include Company
   include InstanceCounter
 
-  NUMBER_FORMAT = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i
+  NUMBER_FORMAT = /^[а-яa-z0-9]{3}-?[а-яa-z0-9]{2}$/i.freeze
 
-  attr_reader :number
-  attr_accessor :speed
-  attr_accessor :current_station
-  attr_reader :carriages, :type
+  attr_reader :number, :carriages, :type
+  attr_accessor :speed, :current_station
 
-  @@trains = []
+  class << self
+    def add_train(train)
+      @trains ||= []
+      @trains << train
+    end
 
-  def self.find(number)
-    @@trains.each { |train| return train if number == train.number }
-    return
+    def find(number)
+      @trains.each { |train| return train if number == train.number }
+      nil
+    end
   end
 
   def initialize(number, type)
@@ -29,108 +35,79 @@ class Train
     @route = nil
     @current_station_position = 0
     @current_station = nil
-    @@trains << self
+    self.class.add_train(self)
     register_instance
   end
 
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
-  # написать метод, который принимает блок и проходит по всем вагонам 
-  # поезда (вагоны должны быть во внутреннем массиве), 
-  # передавая каждый объект вагона в блок.
-  def get_carriages(&block)
-    if block_given?
-      @carriages.each_with_index do |carriage, index| 
-        yield(carriage, index + 1)
-      end
-    end
+  def carriages_list
+    @carriages.each_with_index { |carriage, index| yield(carriage, index + 1) } if block_given?
   end
 
-  # тормозить
   def stop
     @speed = 0
   end
 
-  # прицеплять вагон
   def add_carriage(carriade)
     @carriages << carriade
   end
-  
-  # отцеплять вагон
+
   def remove_carriage(index)
     @carriages.delete_at(index)
   end
 
-  # назначение маршрута поезду
-  def set_route(route)
+  def route(route)
     @route = route
 
-    # устанавливаем текущую позицию поезда на первой станции в маршруте
     @current_station_position = 0
 
-    # добавиться в список поездов на станции
     add_train_to_station_list
   end
 
-  # поезд движется вперед
   def go_ahead
-    # увеличиваем позицию для перемещения по маршруту
     @current_station_position += 1
-    
+
     remove_train_from_station_list
     add_train_to_station_list
   end
 
-  # поезд движется назад
   def go_back
-    # уменьшаем позицию для перемещения по маршруту
     @current_station_position -= 1
 
     remove_train_from_station_list
     add_train_to_station_list
   end
 
-  # возвращаем предыдущую станцию
   def prev_station
-    if @current_station_position > 0
-      @route.stations[@current_station_position - 1]
-    end
+    @route.stations[@current_station_position - 1] if @current_station_position.positive?
   end
 
-  # возвращаем следующую станцию
   def next_station
-    if @current_station_position < @route.stations.length
-      @route.stations[@current_station_position + 1]
-    end
+    @route.stations[@current_station_position + 1] if @current_station_position < @route.stations.length
   end
 
-  # эти методы вызываются только в методах внутри оъекта, 
-  # они не должны вызываться из вне объекта
-  # они не переназначаются в дочерних классах, поэтому они 
-  # сделаны private а не protected
   private
 
   def validate!
-    raise(
-      RegexpError, 
-      'Допустимый формат: три буквы или цифры в любом порядке, ' \
-      'необязательный дефис (может быть, а может нет) и еще 2 ' \
-      'буквы или цифры после дефиса.' 
-      ) if @number !~ NUMBER_FORMAT
-    raise TypeError, 'Нет такого типа поезда' unless TYPE.key?(@type)
+    error_message1 = 'Допустимый формат: три буквы или цифры в любом порядке, ' \
+    'необязательный дефис (может быть, а может нет) и еще 2 ' \
+    'буквы или цифры после дефиса.'
+    raise ArgumentError, error_message1 unless @number =~ NUMBER_FORMAT
+
+    error_message2 = 'Нет такого типа поезда'
+    raise ArgumentError, error_message2 unless TYPE.key?(@type)
   end
 
-  # занесение поезда в список поездов станции
   def add_train_to_station_list
     @route.stations[@current_station_position].accept_train(self)
   end
 
-  # удаление поезда из списка поездов станции
   def remove_train_from_station_list
     @current_station.send_train(self)
   end
