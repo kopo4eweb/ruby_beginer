@@ -1,6 +1,4 @@
-# rubocop:disable Style/FrozenStringLiteralComment, Layout/LeadingCommentSpace
 #!/usr/bin/env ruby
-# rubocop:enable Style/FrozenStringLiteralComment, Layout/LeadingCommentSpace
 
 # rubocop:disable Style/StringLiterals
 ADDED_OR_MODIFIED = /^\s*(A|AM|M)/.freeze
