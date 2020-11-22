@@ -43,11 +43,19 @@ class A
   class_eval do
     def another_method
       puts "I'm another methods"
+      puts "gets instance varible #{@x}"
     end
   end
 end
 
+puts '-------------'
+
 a.another_method
+puts '-------------'
+
+a2 = A.new
+a2.another_method
+puts '-------------'
 
 p A.class_variables
 p A.class_variable_get :@@v
@@ -55,11 +63,13 @@ A.class_variable_set :@@v, 554433
 p A.class_variable_get :@@v
 A.class_variable_set :@@r, 'Hello Kity'
 p A.class_variables
+puts '-------------'
 
 p a.instance_variables
 b = A.new
 p b.instance_variables
 
+puts '-------------'
 p b.instance_variable_get :@x
 b.instance_variable_set :@k, 1234567890
 p b.instance_variables
