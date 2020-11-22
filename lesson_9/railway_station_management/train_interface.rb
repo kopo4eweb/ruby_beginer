@@ -19,6 +19,7 @@ class TrainInterface
         puts '7 - Задать скорость поезду'
         puts '8 - Остановить поезд'
         puts '9 - Проверить на валидность'
+        puts '10 - История скорости поезда'
       end
 
       puts '0 - Вернуться в меню поездов'
@@ -71,6 +72,9 @@ class TrainInterface
         when 9
           puts '--> Проверить на валидность'
           puts "\tДанные поезда #{@train.valid? ? 'валидны' : 'не валидны'}"
+        when 10
+          puts '--> История скорости поезда'
+          puts "\tСкорость: #{@train.speed_history}"
         else
           puts '! Неизвестная операция'
         end

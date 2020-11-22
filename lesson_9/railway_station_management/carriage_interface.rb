@@ -76,16 +76,19 @@ class CarriageInterface
 
     def input_carriage
       puts 'Выберите тип вагонов:'
-      puts '1 - Грузовые'
-      puts '2 - Пассажирские'
+
+      Type.classes.each_with_index do |type, index|
+        puts "#{index + 1} - #{type}"
+      end
+
       print '>> '
       type = gets.chomp.to_i
 
       error_message1 = 'Нет такого типа вагонов'
-      raise ArgumentError, error_message1 if type <= 0 || type > TYPE.size
+      raise ArgumentError, error_message1 if type <= 0 || type > Type.classes.size
 
       error_message2 = "К поезду типа '#{@train.type}' можно прицеплять вагоны только того же типа"
-      raise ArgumentError, error_message2 unless TYPE.to_a[type - 1][0] == @train.type
+      raise ArgumentError, error_message2 unless Type.classes[type - 1] == @train.type
 
       type
     end

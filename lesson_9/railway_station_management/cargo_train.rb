@@ -5,6 +5,6 @@ require_relative 'train'
 # type train is cargo
 class CargoTrain < Train
   def initialize(number)
-    super(number, TYPE[:cargo])
+    super(number, Cargo)
   end
 end

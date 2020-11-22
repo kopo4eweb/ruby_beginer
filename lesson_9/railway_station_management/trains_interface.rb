@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'cargo_train'
+require_relative 'train'
 require_relative 'passenger_train'
 require_relative 'train_interface'
 
@@ -8,9 +9,7 @@ require_relative 'train_interface'
 class TrainsInterface
   class << self
     def selectable_operations
-      puts "Поездов: Грз[#{CargoTrain.instances}], " \
-        "Пасж[#{PassengerTrain.instances}], " \
-        "без указания типа[#{Train.instances}]"
+      puts "Поездов: Грз[#{CargoTrain.instances}], Пасж[#{PassengerTrain.instances}]"
 
       puts 'Введите цифру - выберите действие:'
       puts '1 - Создать поезд'
@@ -61,8 +60,11 @@ class TrainsInterface
         number = gets.chomp
 
         puts 'Выберите тип поезда:'
-        puts '1 - Грузовой'
-        puts '2 - Пассажирский'
+
+        Type.classes.each_with_index do |type, index|
+          puts "#{index + 1} - #{type}"
+        end
+
         print '>> '
         type = gets.chomp.to_i
 
